@@ -36,5 +36,8 @@ class Reason(models.Model):
     message = models.TextField()
     favorited_by = models.ManyToManyField(User, related_name="favorited_reason_set", blank=True)
 
+    class Meta:
+        ordering = ['-date']
+
     def __str__(self):
         return f"{self.date} by {self.author}"
