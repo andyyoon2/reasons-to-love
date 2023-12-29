@@ -1,4 +1,4 @@
-import ReasonView, { Reason } from './ReasonView';
+import ReasonView, { Reason } from '../ReasonView';
 
 const mockReason: Reason = {
   id: '1',
@@ -23,10 +23,9 @@ export default async function Page() {
 
   return (
     <main>
-      {/* TODO: Get the author name from the partnership */}
-      <h1 className="text-2xl font-semibold mb-4">Reasons why JaeMin loves you</h1>
+      <h1 className="text-2xl font-semibold mb-4">Your favorites</h1>
       {reasons.length === 0 && (
-        <p>No reasons yet.</p>
+        <p>No favorites yet.</p>
       )}
       {reasons.map(reason => (
         <div key={reason.id} className="mb-4">
