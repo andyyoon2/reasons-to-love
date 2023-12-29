@@ -1,14 +1,16 @@
-interface Reason {
-  id: string;
-  date: Date;
-  partnership: number;
-  author: string;
-  message: string;
-  favoritedBy: string[];
+import ReasonView, { Reason } from './ReasonView';
+
+const mockReason: Reason = {
+  id: '1',
+  date: '2023-12-25',
+  partnership: 1,
+  author: 'Andy Yoon',
+  message: '재민, I love you because you are so funny and you love chocolate.',
+  favoritedBy: [],
 }
 
 async function fetchReasons(): Promise<Reason[]> {
-  return [];
+  return [mockReason];
 }
 
 export default async function Page() {
@@ -17,13 +19,13 @@ export default async function Page() {
   return (
     <main>
       {/* TODO: Get the author name from the partnership */}
-      <h1>Reasons why JaeMin loves you</h1>
+      <h1 className="text-2xl font-semibold mb-4">Reasons why JaeMin loves you</h1>
       {reasons.length === 0 && (
         <p>No reasons yet.</p>
       )}
       {reasons.map(reason => (
-        <div key={reason.id}>
-          {JSON.stringify(reason)}
+        <div key={reason.id} className="mb-4">
+          <ReasonView reason={reason} />
         </div>
       ))}
     </main>
