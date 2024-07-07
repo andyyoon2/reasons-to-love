@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <body className={`${inter.className} flex min-h-screen flex-col items-center justify-between my-8 p-24"`}>
+        <body className={`${inter.className} flex min-h-screen flex-col items-center justify-between`}>
           <Header />
           {children}
         </body>
