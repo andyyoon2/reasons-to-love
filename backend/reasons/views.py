@@ -1,6 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework import generics, viewsets, permissions
 from rest_framework.exceptions import ValidationError
@@ -37,8 +35,6 @@ class ReasonView(viewsets.ModelViewSet):
         return Reason.objects.filter(partnership__partnershipuser__user=user)
 
     def perform_create(self, serializer):
-        print("HELLO THERE")
-        print(self.request)
         body = self.request.data
         message = body.get("message", None)
         username = body.get("username", None)
@@ -47,9 +43,8 @@ class ReasonView(viewsets.ModelViewSet):
         if message is None or username is None or partnership is None:
             raise ValidationError("All fields are required.")
 
-        # TODO: We're not setting these foreign key fields correctly
-        reason = Reason.objects.create(message=message)
-        reason.author = AuthUser.objects.filter(username=username).first()
-        reason.partnership = Partnership.objects.get(id=partnership)
-        # serializer.save(reason)
-        reason.save()
+        username = username.replace("|", ".")
+        author = AuthUser.objects.filter(username=username).first()
+        partnership = Partnership.objects.get(id=partnership)
+
+        serializer.save(message=message, author=author, partnership=partnership)

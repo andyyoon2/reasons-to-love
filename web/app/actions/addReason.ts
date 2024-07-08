@@ -22,16 +22,21 @@ export async function addReason(username: string, partnership: any, formData: Fo
     message: formData.get("message"),
   }
 
-  const res = await fetch(`${API_HOST}/reasons/`, {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      "Content-Type": "application/json",
-      authorization: `Bearer ${accessToken}`
-    }
-  });
-
-  const resData = await res.json();
-  console.log(resData);
-  revalidatePath("/");
+  try {
+    const res = await fetch(`${API_HOST}/reasons/`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${accessToken}`
+      }
+    });
+  
+    const resData = await res.json();
+    console.log(resData);
+    revalidatePath("/");
+  } catch (err) {
+    console.error(err);
+    throw new Error("Error creating the message.");
+  }
 }

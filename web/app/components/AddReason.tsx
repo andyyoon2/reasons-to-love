@@ -14,14 +14,9 @@ interface AddReasonProps {
 
 export function AddReason({ className, username, partnership }: AddReasonProps) {
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(event.target.value);
-  }
 
   const handleSubmit = addReason.bind(null, username, partnership);
 
@@ -45,7 +40,7 @@ export function AddReason({ className, username, partnership }: AddReasonProps) 
       )}>
         <button onClick={handleClose} className="absolute top-3 right-3">x</button>
 
-        <form action={handleSubmit}>
+        <form action={handleSubmit} onSubmit={handleClose}>
           <div>
             <p className="mb-8">Write to your partner!</p>
             <textarea
@@ -53,8 +48,6 @@ export function AddReason({ className, username, partnership }: AddReasonProps) 
               className="border border-slate-400 rounded w-full p-4"
               autoFocus
               placeholder="I love you because..."
-              // value={message}
-              // onChange={handleTextareaChange}
             />
           </div>
 
