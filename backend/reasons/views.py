@@ -15,18 +15,21 @@ class UserView(generics.RetrieveUpdateAPIView):
     queryset = user_model.objects.all()
     serializer_class = UserSerializer
 
-class PartnershipView(generics.ListAPIView):
-    # permission_classes = [permissions.IsAuthenticated]
+class PartnershipView(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = PartnershipSerializer
 
-    def get_queryset(self):
-        print(self.request)
-        """Returns partnerships for the current user"""
+    def get_object(self):
+        """Returns partnership for the current user"""
         user = self.request.user
-        print(vars(user))
-        return Partnership.objects.filter(user=user)
+        return Partnership.objects.filter(partnershipuser__user=user).first()
 
 class ReasonView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Reason.objects.all()
     serializer_class = ReasonSerializer
+
+    def get_queryset(self):
+        """Returns reasons in the current user's partnership"""
+        user = self.request.user
+        return Reason.objects.filter(partnership__partnershipuser__user=user)

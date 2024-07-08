@@ -11,6 +11,7 @@ async function UserInfo() {
       <div className="flex items-center gap-2">
         <p>{user.name}</p>
         <img className="w-8 aspect-square rounded-full" src={user.picture} />
+        <a href="/api/auth/logout">Logout</a>
       </div>
     );
   }
@@ -18,7 +19,6 @@ async function UserInfo() {
   return (
     <div className="flex items-center gap-4">
       <a href="/api/auth/login">Login</a>
-      <a href="/api/auth/logout">Logout</a>
     </div>
   );
 }
