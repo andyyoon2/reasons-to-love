@@ -1,16 +1,18 @@
-# from django.shortcuts import render
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework import generics, viewsets, permissions
 
 from .serializers import UserSerializer, ReasonSerializer, PartnershipSerializer
-from .models import User, Reason, Partnership
+from .models import Reason, Partnership
+
+user_model = get_user_model()
 
 # Create your views here.
 class UserView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all()
+    queryset = user_model.objects.all()
     serializer_class = UserSerializer
 
 class PartnershipView(generics.ListAPIView):
