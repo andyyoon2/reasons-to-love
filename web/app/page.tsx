@@ -28,14 +28,14 @@ export default async function Home() {
   // TODO: Pagination
 
   const reasons = await fetchServerSide<Reason[]>('/reasons/', []);
-  // const partnership = await fetchServerSide<any>('/partnerships/', {});
+  const partnership = await fetchServerSide<any>('/partnerships/', {});
 
   return (
     <main>
       <div className="max-w-prose">
         <h1 className="text-4xl font-light tracking-tight my-[1em]">Reasons to Love in Sweet Whale</h1>
 
-        <AddReason className="mb-8" />
+        <AddReason className="mb-8" username={session.user.sub} partnership={partnership} />
 
         {reasons.map(reason => (
           <div key={reason.id} className="mb-8">

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework import generics, viewsets, permissions
+from rest_framework.exceptions import ValidationError
 
 from .serializers import UserSerializer, ReasonSerializer, PartnershipSerializer
 from .models import Reason, Partnership
@@ -25,7 +26,7 @@ class PartnershipView(generics.RetrieveUpdateAPIView):
         partnership = Partnership.objects.filter(partnershipuser__user=user).first()
         return partnership
 
-class ReasonView(generics.ListAPIView):
+class ReasonView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Reason.objects.all()
     serializer_class = ReasonSerializer
@@ -34,3 +35,21 @@ class ReasonView(generics.ListAPIView):
         """Returns reasons in the current user's partnership"""
         user = self.request.user
         return Reason.objects.filter(partnership__partnershipuser__user=user)
+
+    def perform_create(self, serializer):
+        print("HELLO THERE")
+        print(self.request)
+        body = self.request.data
+        message = body.get("message", None)
+        username = body.get("username", None)
+        partnership = body.get("partnership", None)
+
+        if message is None or username is None or partnership is None:
+            raise ValidationError("All fields are required.")
+
+        # TODO: We're not setting these foreign key fields correctly
+        reason = Reason.objects.create(message=message)
+        reason.author = AuthUser.objects.filter(username=username).first()
+        reason.partnership = Partnership.objects.get(id=partnership)
+        # serializer.save(reason)
+        reason.save()

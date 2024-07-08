@@ -2,10 +2,17 @@
 
 import { ChangeEvent, useState } from "react";
 import clsx from "clsx";
+import { addReason } from "../actions/addReason";
 
 const twButton = "border border-slate-400 rounded bg-slate-200 px-4 py-2";
 
-export function AddReason({ className }: { className?: string }) {
+interface AddReasonProps {
+  className?: string;
+  username: string;
+  partnership: any;
+}
+
+export function AddReason({ className, username, partnership }: AddReasonProps) {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -16,9 +23,7 @@ export function AddReason({ className }: { className?: string }) {
     setMessage(event.target.value);
   }
 
-  const submit = () => {
-
-  }
+  const handleSubmit = addReason.bind(null, username, partnership);
 
   return (
     <>
@@ -40,19 +45,23 @@ export function AddReason({ className }: { className?: string }) {
       )}>
         <button onClick={handleClose} className="absolute top-3 right-3">x</button>
 
-        <div>
-          <p className="mb-8">Write to your partner!</p>
-          <textarea
-            className="border border-slate-400 rounded w-full p-4"
-            autoFocus
-            value={message}
-            onChange={handleTextareaChange}
-          />
-        </div>
+        <form action={handleSubmit}>
+          <div>
+            <p className="mb-8">Write to your partner!</p>
+            <textarea
+              name="message"
+              className="border border-slate-400 rounded w-full p-4"
+              autoFocus
+              placeholder="I love you because..."
+              // value={message}
+              // onChange={handleTextareaChange}
+            />
+          </div>
 
-        <div className="mt-4 text-right">
-          <button className={clsx(twButton, "py-1 min-w-28")} onClick={submit}>Send</button>
-        </div>
+          <div className="mt-4 text-right">
+            <button className={clsx(twButton, "py-1 min-w-28")} type="submit">Send</button>
+          </div>
+        </form>
       </div>
     </>
   )
