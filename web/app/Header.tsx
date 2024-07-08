@@ -9,9 +9,9 @@ async function UserInfo() {
   if (user) {
     return (
       <div className="flex items-center gap-2">
-        <p>{user.name}</p>
         <img className="w-8 aspect-square rounded-full" src={user.picture} />
-        <a href="/api/auth/logout">Logout</a>
+        <p>{user.name}</p>
+        {/* <a href="/api/auth/logout">Logout</a> */}
       </div>
     );
   }
@@ -23,15 +23,15 @@ async function UserInfo() {
   );
 }
 
-export default function Header({ className }: { className?: string; }) {
+export default function Header() {
   return (
-    <header className="w-full p-4 flex space-between items-center gap-4">
+    <header className="w-full p-4 flex space-between items-center gap-4 max-w-6xl">
       <span className="grow font-semibold">Reasons to Love.</span>
-      <nav className={className}>
+      {/* <nav className={className}>
         <Link href="/reasons/favorites">Favorites 💛</Link>
         <Link href="/reasons">Reasons 🗒️</Link>
         <Link href="/reasons/sent">Sent ✉️</Link>
-      </nav>
+      </nav> */}
       <Suspense>
         <UserInfo />
       </Suspense>

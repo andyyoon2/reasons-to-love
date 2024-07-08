@@ -1,31 +1,19 @@
-import { getAccessToken, getSession } from "@auth0/nextjs-auth0";
+import { getSession } from "@auth0/nextjs-auth0";
+import { Reason } from "./models";
+import { fetchServerSide } from "./utils";
+import { AddReason } from "./components/AddReason";
 
-const API_HOST = process.env.REASONS_API_HOST || "";
-
-async function fetchPartnership() {
-  const {accessToken} = await getAccessToken();
-  if (!accessToken) {
-    return [];
-  }
-
-  try {
-    const res = await fetch(`${API_HOST}/reasons/`, {
-      headers: {
-        contentType: 'application/json',
-        authorization: `Bearer ${accessToken}`
-      }
-    });
-
-    if (!res.ok) {
-      console.error(res);
-      return [];
-    }
-
-    return await res.json();
-  } catch (err) {
-    console.error(err);
-    return [];
-  }
+function formatDate(d: string): string {
+  // Assume d is ISO-8601 format
+  const date = new Date(d);
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  } as const;
+  return new Intl.DateTimeFormat(undefined, options).format(date);
 }
 
 export default async function Home() {
@@ -36,12 +24,29 @@ export default async function Home() {
     );
   }
 
-  const partnership = await fetchPartnership();
+  // TODO: Handle if user doesn't have partnership yet
+  // TODO: Pagination
+
+  const reasons = await fetchServerSide<Reason[]>('/reasons/', []);
+  // const partnership = await fetchServerSide<any>('/partnerships/', {});
 
   return (
     <main>
-      <h1>Welcome!</h1>
-      <p className="font-mono">{JSON.stringify(partnership)}</p>
+      <div className="max-w-prose">
+        <h1 className="text-4xl font-light tracking-tight my-[1em]">Reasons to Love in Sweet Whale</h1>
+
+        <AddReason className="mb-8" />
+
+        {reasons.map(reason => (
+          <div key={reason.id} className="mb-8">
+            <div className="flex items-center gap-2">
+              <div className="bg-slate-400 h-5 aspect-square rounded-full"></div>
+              <p className="text-sm text-slate-600">{formatDate(reason.date)}</p>
+            </div>
+            <p className="mt-2">{reason.message}</p>
+          </div>
+        ))}
+      </div>
     </main>
-  )
+  );
 }

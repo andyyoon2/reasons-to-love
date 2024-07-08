@@ -7,12 +7,12 @@ from rest_framework import generics, viewsets, permissions
 from .serializers import UserSerializer, ReasonSerializer, PartnershipSerializer
 from .models import Reason, Partnership
 
-user_model = get_user_model()
+AuthUser = get_user_model()
 
 # Create your views here.
 class UserView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = user_model.objects.all()
+    queryset = AuthUser.objects.all()
     serializer_class = UserSerializer
 
 class PartnershipView(generics.RetrieveUpdateAPIView):
@@ -22,7 +22,8 @@ class PartnershipView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         """Returns partnership for the current user"""
         user = self.request.user
-        return Partnership.objects.filter(partnershipuser__user=user).first()
+        partnership = Partnership.objects.filter(partnershipuser__user=user).first()
+        return partnership
 
 class ReasonView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
