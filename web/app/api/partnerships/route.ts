@@ -4,6 +4,7 @@ import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 /** Gets the most recent partnership for the currently logged in user */
 export const GET = withApiAuthRequired(async () => {
   const session = await getSession();
+  console.log(session);
   const userId = session?.user.sub;
   const partnerships = await prisma.partnership.findFirst({
     where: {
