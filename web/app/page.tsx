@@ -20,7 +20,7 @@ export default async function Home() {
   const session = await getSession();
   if (!session?.user) {
     return (
-      <main>Please login.</main>
+      <main className="h-screen">Please login.</main>
     );
   }
 
