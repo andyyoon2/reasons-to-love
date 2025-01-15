@@ -3,6 +3,7 @@ import { Reason } from "./models";
 import { fetchServerSide } from "./utils";
 import { AddReason } from "./components/AddReason";
 import { prisma } from "./lib/prisma";
+import CreatePartnershipForm from "./components/CreatePartnershipForm";
 
 function formatDate(d: string): string {
   // Assume d is ISO-8601 format
@@ -32,6 +33,17 @@ async function getPartnership(userId: string) {
   });
 }
 
+async function getReasons(partnershipId: number) {
+  return prisma.message.findMany({
+    where: {
+      partnershipId,
+    },
+    orderBy: {
+      date: 'desc',
+    },
+  });
+}
+
 export default async function Home() {
   const session = await getSession();
   if (!session?.user) {
@@ -43,10 +55,8 @@ export default async function Home() {
   // TODO: Handle if user doesn't have partnership yet
   // TODO: Pagination
 
-  const reasons = await fetchServerSide<Reason[]>('/reasons/', []);
-  // const partnership = await fetchServerSide<any>('/partnerships/', {});
   const partnership = await getPartnership(session.user.sub);
-  console.log(partnership);
+  console.log('partnership', partnership);
 
   if (!partnership) {
     return (
@@ -54,22 +64,20 @@ export default async function Home() {
         <div className="max-w-prose">
           <h1 className="text-4xl font-light tracking-tight my-[1em]">Create a partnership</h1>
 
-          {/* A simple form to create a partnership */}
-          <form action="/api/partnerships" method="post">
-            <input type="text" name="name" placeholder="Partnership name" />
-            <button type="submit">Create</button>
-          </form>
+          <CreatePartnershipForm />
         </div>
       </main>
     );
   }
+
+  const reasons = await getReasons(partnership.id);
 
   return (
     <main>
       <div className="max-w-prose">
         <h1 className="text-4xl font-light tracking-tight my-[1em]">Reasons to Love in Sweet Whale</h1>
 
-        <AddReason className="mb-8" username={session.user.sub} partnership={partnership} />
+        <AddReason className="mb-8" partnership={partnership} />
 
         {reasons.map(reason => (
           <div key={reason.id} className="mb-8">
