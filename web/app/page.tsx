@@ -1,13 +1,9 @@
 import { getSession } from "@auth0/nextjs-auth0";
-import { Reason } from "./models";
-import { fetchServerSide } from "./utils";
 import { AddReason } from "./components/AddReason";
 import { prisma } from "./lib/prisma";
 import CreatePartnershipForm from "./components/CreatePartnershipForm";
 
-function formatDate(d: string): string {
-  // Assume d is ISO-8601 format
-  const date = new Date(d);
+function formatDate(d: Date): string {
   const options = {
     year: "numeric",
     month: "short",
@@ -15,7 +11,7 @@ function formatDate(d: string): string {
     hour: "numeric",
     minute: "numeric",
   } as const;
-  return new Intl.DateTimeFormat(undefined, options).format(date);
+  return new Intl.DateTimeFormat(undefined, options).format(d);
 }
 
 async function getPartnership(userId: string) {

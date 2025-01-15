@@ -3,8 +3,7 @@ import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { NextRequest } from 'next/server';
 
 /** Gets all reasons within the given partnership for the currently logged in user */
-// @ts-ignore - annoying typing issue with params when wrapping with withApiAuthRequired
-export const GET = withApiAuthRequired(async (
+export const GET = async (
   request: NextRequest,
   {params}: {params: { id: string }}
 ) => {
@@ -22,4 +21,4 @@ export const GET = withApiAuthRequired(async (
     },
   });
   return Response.json(reasons);
-});
+};

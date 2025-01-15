@@ -1,9 +1,9 @@
 import { prisma } from '@/app/lib/prisma';
-import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
+import { getSession } from '@auth0/nextjs-auth0';
 import { NextRequest } from 'next/server';
 
 /** Get the most recent partnership for the currently logged in user */
-export const GET = withApiAuthRequired(async () => {
+export const GET = async () => {
   const session = await getSession();
   console.log(session);
   const userId = session?.user.sub;
@@ -20,11 +20,10 @@ export const GET = withApiAuthRequired(async () => {
     },
   });
   return Response.json(partnerships);
-});
+};
 
 /** Create a new partnership for the currently logged in user */
-// @ts-ignore - withApiAuthRequired has outdated types for NextRequest
-export const POST = withApiAuthRequired(async (request: NextRequest) => {
+export const POST = async (request: NextRequest) => {
   const session = await getSession();
   const userId = session?.user.sub;
   
@@ -55,4 +54,4 @@ export const POST = withApiAuthRequired(async (request: NextRequest) => {
   });
 
   return Response.json(partnership);
-});
+};
