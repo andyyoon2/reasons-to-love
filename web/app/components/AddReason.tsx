@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import clsx from "clsx";
 import { addReason } from "../actions/addReason";
 
@@ -8,17 +8,16 @@ const twButton = "border border-slate-400 rounded bg-slate-200 px-4 py-2";
 
 interface AddReasonProps {
   className?: string;
-  username: string;
   partnership: any;
 }
 
-export function AddReason({ className, username, partnership }: AddReasonProps) {
+export function AddReason({ className, partnership }: AddReasonProps) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = addReason.bind(null, username, partnership);
+  const handleSubmit = addReason.bind(null, partnership);
 
   return (
     <>
