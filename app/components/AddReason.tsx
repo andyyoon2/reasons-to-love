@@ -4,7 +4,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import { addReason } from "../actions/addReason";
 
-const twButton = "border border-slate-400 rounded bg-slate-200 px-4 py-2";
+const twButton = "border border-slate-400 rounded bg-slate-200 dark:bg-slate-800 px-4 py-2";
 
 interface AddReasonProps {
   className?: string;

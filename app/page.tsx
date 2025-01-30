@@ -67,6 +67,7 @@ export default async function Home() {
   }
 
   const reasons = await getReasons(partnership.id);
+  console.log(reasons.slice(4))
 
   return (
     <main>
@@ -79,7 +80,7 @@ export default async function Home() {
           <div key={reason.id} className="mb-8">
             <div className="flex items-center gap-2">
               <div className="bg-slate-400 h-5 aspect-square rounded-full"></div>
-              <p className="text-sm text-slate-600">{formatDate(reason.date)}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-100">{formatDate(reason.date)}</p>
             </div>
             <p className="mt-2">{reason.message}</p>
           </div>
