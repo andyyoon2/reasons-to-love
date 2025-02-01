@@ -4,9 +4,9 @@ import { ManagementClient } from 'auth0';
 
 const getAuthorImage = cache(async (id: string) => {
   const client = new ManagementClient({
-    domain: process.env.AUTH0_DOMAIN,
-    clientId: process.env.AUTH0_CLIENT_ID,
-    clientSecret: process.env.AUTH0_CLIENT_SECRET,
+    domain: process.env.AUTH0_DOMAIN ?? '',
+    clientId: process.env.AUTH0_CLIENT_ID ?? '',
+    clientSecret: process.env.AUTH0_CLIENT_SECRET ?? '',
   });
 
   const res = await client.users.get({ id: id });
