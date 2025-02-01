@@ -4,7 +4,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import { addReason } from "../actions/addReason";
 
-const twButton = "border border-slate-400 rounded bg-slate-200 px-4 py-2";
+const twButton = "border border-slate-400 rounded bg-slate-200 dark:bg-slate-800 px-4 py-2";
 
 interface AddReasonProps {
   className?: string;
@@ -34,8 +34,8 @@ export function AddReason({ className, partnership }: AddReasonProps) {
       {/* Modal */}
       <div className={clsx(
         open ? "opacity-100 z-10" : "opacity-0 -z-10",
-        "transition fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-80 min-h-80",
-        "bg-white p-8 border border-slate-200 rounded shadow-lg"
+        "transition fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 min-h-40",
+        "bg-white dark:bg-zinc-800 p-4 border border-slate-200 rounded shadow-lg"
       )}>
         <button onClick={handleClose} className="absolute top-3 right-3">x</button>
 
@@ -44,7 +44,7 @@ export function AddReason({ className, partnership }: AddReasonProps) {
             <p className="mb-8">Write to your partner!</p>
             <textarea
               name="message"
-              className="border border-slate-400 rounded w-full p-4"
+              className="border border-slate-400 rounded w-full p-4 dark:bg-zinc-600 dark:text-slate-50"
               autoFocus
               placeholder="I love you because..."
             />

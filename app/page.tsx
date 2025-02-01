@@ -1,8 +1,11 @@
+import { Suspense } from 'react';
 import { getSession } from "@auth0/nextjs-auth0";
 import { AddReason } from "./components/AddReason";
 import { prisma } from "./lib/prisma";
 import CreatePartnershipForm from "./components/CreatePartnershipForm";
+import { UserAvatar, UserAvatarLoading } from './components/UserAvatar';
 
+// TODO: Use local timezone here
 function formatDate(d: Date): string {
   const options = {
     year: "numeric",
@@ -42,6 +45,7 @@ async function getReasons(partnershipId: number) {
 
 export default async function Home() {
   const session = await getSession();
+  console.log(session);
   if (!session?.user) {
     return (
       <main className="h-screen">Please login.</main>
@@ -67,6 +71,7 @@ export default async function Home() {
   }
 
   const reasons = await getReasons(partnership.id);
+  console.log(reasons.slice(0,2))
 
   return (
     <main>
@@ -78,8 +83,10 @@ export default async function Home() {
         {reasons.map(reason => (
           <div key={reason.id} className="mb-8">
             <div className="flex items-center gap-2">
-              <div className="bg-slate-400 h-5 aspect-square rounded-full"></div>
-              <p className="text-sm text-slate-600">{formatDate(reason.date)}</p>
+              <Suspense fallback={<UserAvatarLoading />}>
+                <UserAvatar authorId={reason.authorId} />
+              </Suspense>
+              <p className="text-sm text-slate-600 dark:text-slate-300">{reason.date.toLocaleString()}</p>
             </div>
             <p className="mt-2">{reason.message}</p>
           </div>

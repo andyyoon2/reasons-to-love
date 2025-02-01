@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <body className={`${inter.className} flex min-h-screen flex-col items-center justify-start`}>
+        <body className={`${inter.className} dark:bg-zinc-900 dark:text-slate-50 flex min-h-400 flex-col items-center justify-start`}>
           <Header />
           {children}
         </body>
