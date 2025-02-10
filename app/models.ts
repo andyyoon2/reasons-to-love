@@ -1,8 +1,10 @@
+// TS models for Prisma schema
+
 export interface Reason {
   id: number;
-  date: string;
+  date: Date;
   message: string;
-  partnership: number;
-  author: number;
-  favorited_by: number[];
+  partnershipId: number;
+  authorId: string;
+  // usersWhoFavorited: number[];
 }

@@ -2,7 +2,7 @@ import { cache } from "react";
 import { getSession } from "@auth0/nextjs-auth0";
 import { ManagementClient } from 'auth0';
 
-const getAuthorImage = cache(async (id: string) => {
+export const getAuth0User = cache(async (id: string) => {
   const client = new ManagementClient({
     domain: process.env.AUTH0_DOMAIN ?? '',
     clientId: process.env.AUTH0_CLIENT_ID ?? '',
@@ -10,31 +10,30 @@ const getAuthorImage = cache(async (id: string) => {
   });
 
   const res = await client.users.get({ id: id });
-  console.log(res);
-  return res.data.picture;
+  return res.data;
 })
 
-export function UserAvatarLoading() {
-  return <div className="bg-slate-400 h-5 aspect-square rounded-full" />
+export function UserAvatarLoading({ size = 'small' }: { size?: 'small' | 'large' }) {
+  return <div className={`bg-slate-400 ${size === 'large' ? 'h-10' : 'h-5'} aspect-square rounded-full`} />
 }
 
-export async function UserAvatar({ authorId }: { authorId: string }) {
+export async function UserAvatar({ authorId, size = 'small' }: { authorId: string, size?: 'small' | 'large' }) {
   const session = await getSession();
 
   if (!session?.user) {
     return null;
   }
 
-  let src = '';
+  let author;
   if (authorId === session.user.sub) {
-    src = session.user.picture;
+    author = session.user;
   } else {
-    src = await getAuthorImage(authorId);
+    author = await getAuth0User(authorId);
   }
 
   return (
-    <div className="bg-slate-400 h-5 aspect-square rounded-full">
-      <img src={src} className="h-full w-full rounded-full" />
+    <div className={`bg-slate-400 ${size === 'large' ? 'h-10' : 'h-5'} aspect-square rounded-full`}>
+      <img src={author.picture} className="h-full w-full rounded-full" />
     </div>
   )
 }

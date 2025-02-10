@@ -4,6 +4,9 @@ import { AddReason } from "./components/AddReason";
 import { prisma } from "./lib/prisma";
 import CreatePartnershipForm from "./components/CreatePartnershipForm";
 import { UserAvatar, UserAvatarLoading } from './components/UserAvatar';
+import { ReasonsList } from './components/Reasons/ReasonsList';
+import { ReasonListItem } from './components/Reasons/ReasonListItem';
+import { FeaturedReason } from './components/Reasons/FeaturedReason';
 
 // TODO: Use local timezone here
 function formatDate(d: Date): string {
@@ -40,12 +43,12 @@ async function getReasons(partnershipId: number) {
     orderBy: {
       date: 'desc',
     },
+    take: 10, // TODO: Pagination
   });
 }
 
 export default async function Home() {
   const session = await getSession();
-  console.log(session);
   if (!session?.user) {
     return (
       <main className="h-screen">Please login.</main>
@@ -56,7 +59,6 @@ export default async function Home() {
   // TODO: Pagination
 
   const partnership = await getPartnership(session.user.sub);
-  console.log('partnership', partnership);
 
   if (!partnership) {
     return (
@@ -71,7 +73,6 @@ export default async function Home() {
   }
 
   const reasons = await getReasons(partnership.id);
-  console.log(reasons.slice(0,2))
 
   return (
     <main>
@@ -80,17 +81,13 @@ export default async function Home() {
 
         <AddReason className="mb-8" partnership={partnership} />
 
-        {reasons.map(reason => (
-          <div key={reason.id} className="mb-8">
-            <div className="flex items-center gap-2">
-              <Suspense fallback={<UserAvatarLoading />}>
-                <UserAvatar authorId={reason.authorId} />
-              </Suspense>
-              <p className="text-sm text-slate-600 dark:text-slate-300">{reason.date.toLocaleString()}</p>
-            </div>
-            <p className="mt-2">{reason.message}</p>
-          </div>
-        ))}
+        {reasons.length > 0 && (
+          <ReasonsList
+            featuredReason={<FeaturedReason reason={reasons[0]} />}
+            featuredReasonDate={reasons[0].date}
+            reasonsList={reasons.map(reason => <ReasonListItem key={reason.id} reason={reason} />)}
+          />
+        )}
       </div>
     </main>
   );
