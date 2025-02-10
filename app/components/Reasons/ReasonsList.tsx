@@ -1,9 +1,6 @@
 'use client';
 
-import { Reason } from "@/app/models";
-import { ReasonListItem } from "./ReasonListItem";
 import { useState, useEffect } from "react";
-import { FeaturedReason } from "./FeaturedReason";
 
 const STORAGE_KEY = 'reasons:dateLastSeen';
 
@@ -26,8 +23,8 @@ export function ReasonsList({ featuredReason, featuredReasonDate, reasonsList }:
     }
   }, []);
 
-  // Show featured reason if user hasn't seen it yet
-  const showFeaturedReason = dateLastSeen && featuredReasonDate < dateLastSeen;
+  // Show featured reason if user hasn't seen it yet (15 min overlap period)
+  const showFeaturedReason = dateLastSeen && featuredReasonDate >= new Date(dateLastSeen.getTime() + 15 * 60 * 1000);
   const reasonsToDisplay = showFeaturedReason ? reasonsList.slice(1) : reasonsList;
 
   return (
