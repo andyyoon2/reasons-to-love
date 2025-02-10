@@ -5,7 +5,6 @@ import { NextRequest } from 'next/server';
 /** Get the most recent partnership for the currently logged in user */
 export const GET = async () => {
   const session = await getSession();
-  console.log(session);
   const userId = session?.user.sub;
   const partnerships = await prisma.partnership.findFirst({
     where: {
