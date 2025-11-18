@@ -2,6 +2,7 @@ import { UserAvatarLoading, UserAvatar, getAuth0User } from "../UserAvatar";
 import { Suspense } from "react";
 import { Reason } from "@/app/models";
 import { getSession } from "@auth0/nextjs-auth0";
+import { DateDisplay } from "./DateDisplay";
 
 export async function FeaturedReason({ reason }: { reason: Reason }) {
   // Copied from UserAvatar.tsx
@@ -28,7 +29,7 @@ export async function FeaturedReason({ reason }: { reason: Reason }) {
         <p className="text-sm text-slate-300 dark:text-slate-700 self-start mt-2">NEW</p>
       </div>
       <p className="text-lg mt-2 text-slate-100 dark:text-slate-900">{reason.message}</p>
-      <p className="text-slate-300 dark:text-slate-600">{reason.date.toLocaleString()}</p>
+      <DateDisplay date={reason.date} className="text-slate-300 dark:text-slate-600" />
     </div>
   )
 }
